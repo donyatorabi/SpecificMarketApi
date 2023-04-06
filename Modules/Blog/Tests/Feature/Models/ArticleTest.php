@@ -2,20 +2,20 @@
 
 namespace Modules\Blog\Tests\Feature\Models;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Blog\Entities\Article;
 use Modules\Blog\Entities\ArticleCategory;
+use Modules\Tag\Entities\Tag;
+use Tests\Feature\Models\ModelHelperTesting;
 use Tests\TestCase;
 
 class ArticleTest extends TestCase
 {
-    public function testInsertData()
+    use ModelHelperTesting;
+
+    protected function model(): Model
     {
-        $data = Article::factory()->create()->toArray();
-
-        Article::create($data);
-
-        $this->assertDatabaseHas('articles', $data);
+        return new Article();
     }
 
     public function testArticleRelationshipWithArticleCategory()
@@ -27,5 +27,17 @@ class ArticleTest extends TestCase
 
         $this->assertTrue(isset($article->articleCategory->id));
         $this->assertTrue($article->articleCategory instanceof ArticleCategory);
+    }
+
+    public function testArticleRelationshipWithTag()
+    {
+        $count = rand(1, 10);
+
+        $article = Article::factory()
+            ->hasTags($count)
+            ->create();
+
+        $this->assertCount($count, $article->tags);
+        $this->assertTrue($article->tags->first() instanceof Tag);
     }
 }

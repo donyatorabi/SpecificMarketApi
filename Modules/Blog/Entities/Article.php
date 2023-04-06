@@ -4,6 +4,7 @@ namespace Modules\Blog\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Tag\Entities\Tag;
 
 class Article extends Model
 {
@@ -14,7 +15,7 @@ class Article extends Model
         'content',
         'category_id'
     ];
-    public $timestamps = false;
+
     protected static function newFactory()
     {
         return \Modules\Blog\Database\factories\ArticleFactory::new();
@@ -23,5 +24,10 @@ class Article extends Model
     public function articleCategory()
     {
         return $this->belongsTo(ArticleCategory::class, 'category_id');
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }
