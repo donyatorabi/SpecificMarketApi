@@ -19,9 +19,28 @@ class ArticleService implements ArticleServiceInterface
      */
     public function getList(array $columns, array $criteria = null)
     {
+        $list = $this->articleRepository->getList($criteria);
+
         return [
-            'items' => $this->articleRepository->getList($columns, $criteria),
+            'items' => $this->_prepareData($list),
             'data'  => []
         ];
+    }
+
+    private function _prepareData(array $data)
+    {
+        $result = [];
+        foreach ($data as $datum) {
+            $result[] = [
+                'title'     => $datum['title'],
+                'category'  => [
+                    'id'        => $datum['category_id'],
+                    'name'      => $datum['category_name']
+                ],
+                'content'   => $datum['content']
+            ];
+        }
+
+        return $result;
     }
 }

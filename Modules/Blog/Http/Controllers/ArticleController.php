@@ -30,8 +30,7 @@ class ArticleController extends Controller
      */
     public function index(ArticleRequest $request)
     {
-        dd($request);
-        $lists = $this->articleService->getList();
+        $lists = $this->articleService->getList($request->toArray());
         return response()->json($lists);
     }
 

@@ -10,15 +10,18 @@ class ArticleRepository implements ArticleRepositoryInterface
     /**
      * @see ArticleRepositoryInterface::getList()
      */
-    public function getList(array $columns, array $criteria = null)
+    public function getList(array $criteria = null)
     {
-        $qb = Article::query();
+        $qb = Article::query()
+            ->join('article_categories as ac', 'articles.category_id', '=', 'ac.id')
+            ->select(['articles.id', 'category_id', 'ac.title as category_name', 'articles.title', 'content'])
+        ;
 
         if (!empty($criteria)) {
             $qb = $this->__addFilters($qb, $criteria);
         }
 
-        return $qb->get($columns)->toArray();
+        return $qb->get()->toArray();
     }
 
     /**
