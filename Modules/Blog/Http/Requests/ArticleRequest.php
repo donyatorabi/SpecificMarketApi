@@ -4,7 +4,7 @@ namespace Modules\Blog\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BlogRequest extends FormRequest
+class ArticleRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +14,21 @@ class BlogRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => [
+                'nullable',
+                'regex:/^[\x{0600}-\x{06FF}\s0-9]+$/u',
+                'max:50'
+            ],
+            'content' => [
+                'nullable',
+                'string',
+                'max:100'
+            ],
+            'categoryId' => [
+                'nullable',
+                'integer',
+                'min:1'
+            ]
         ];
     }
 

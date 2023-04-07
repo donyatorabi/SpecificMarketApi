@@ -9,8 +9,9 @@
         </testsuite>
         <testsuite name="Feature">
             <directory suffix="ArticleCategoryTest.php">./Modules/Blog/Tests/Feature</directory>
-            <directory suffix="ArticleTest.php">./Modules/Blog/Tests/Feature</directory>
+            <directory suffix="ArticleTest.php">./Modules/Blog/Tests/Feature/Models</directory>
             <directory suffix="TagTest.php">./Modules/Tag/Tests/Feature</directory>
+            <directory suffix="BlogTest.php">./Modules/Blog/Tests/Feature/Routes</directory>
         </testsuite>
     </testsuites>
     <coverage>

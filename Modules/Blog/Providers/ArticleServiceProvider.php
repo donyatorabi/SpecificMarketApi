@@ -3,9 +3,12 @@
 namespace Modules\Blog\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
+use Modules\Blog\Repositories\ArticleRepository;
+use Modules\Blog\Repositories\ArticleRepositoryInterface;
+use Modules\Blog\Services\ArticleService;
+use Modules\Blog\Services\ArticleServiceInterface;
 
-class BlogServiceProvider extends ServiceProvider
+class ArticleServiceProvider extends ServiceProvider
 {
     /**
      * @var string $moduleName
@@ -37,6 +40,9 @@ class BlogServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(ArticleServiceInterface::class, ArticleService::class);
+        $this->app->bind(ArticleRepositoryInterface::class,
+            ArticleRepository::class);
         $this->app->register(RouteServiceProvider::class);
     }
 

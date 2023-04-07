@@ -3,7 +3,6 @@
 namespace Tests\Feature\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Blog\Entities\Article;
 
 trait ModelHelperTesting
 {

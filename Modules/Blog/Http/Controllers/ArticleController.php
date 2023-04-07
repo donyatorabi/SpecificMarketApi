@@ -2,19 +2,37 @@
 
 namespace Modules\Blog\Http\Controllers;
 
+use App\Http\Controllers\PrepareResponseTrait;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Blog\Entities\Article;
+use Modules\Blog\Http\Requests\ArticleRequest;
+use Modules\Blog\Services\ArticleService;
+use Modules\Blog\Services\ArticleServiceInterface;
 
-class BlogController extends Controller
+class ArticleController extends Controller
 {
+    use PrepareResponseTrait;
+
+    protected ArticleService $articleService;
+    public function __construct(ArticleServiceInterface $articleService)
+    {
+        $this->articleService = $articleService;
+    }
+
     /**
      * Display a listing of the resource.
-     * @return Renderable
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(ArticleRequest $request)
     {
-        return view('blog::index');
+        dd($request);
+        $lists = $this->articleService->getList();
+        return response()->json($lists);
     }
 
     /**
@@ -39,11 +57,12 @@ class BlogController extends Controller
     /**
      * Show the specified resource.
      * @param int $id
-     * @return Renderable
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        return view('blog::show');
+        $article = Article::query()->find($id);
+        return response()->json($article);
     }
 
     /**

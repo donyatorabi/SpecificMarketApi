@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,5 +47,49 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    private function transformErrors(ValidationException $exception)
+    {
+        $errors = '';
+        $i = 0;
+
+        foreach ($exception->errors() as $message) {
+            $i++;
+            $errors .= $i === count($exception->errors()) ? $message[0] : $message[0] . ',';
+        }
+
+        return $errors;
+    }
+
+    public function render($request, Throwable $e)
+    {
+//        dd($request);
+        if ($e instanceof ValidationException) {
+            return response()->json([
+                'status'    => 'error',
+                'data'      => 'application/json',
+                'message'   => $this->transformErrors($e)
+            ],422);
+        }
+
+        if ($e instanceof ModelNotFoundException || $e instanceof NotFoundHttpException) {
+            return response()->json([
+                'status'    => 'error',
+                'data'      => 'application/json',
+                'message'   => 'صفحه مورد نظر یافت نشد!'
+            ],404);
+        }
+
+        // custom error message
+        if ($e instanceof \ErrorException) {
+            return response()->json([
+                'status'    => 'error',
+                'data'      => 'application/json',
+                'message'   => $e->getMessage()
+            ],500);
+        }
+
+        return parent::render($request, $e);
     }
 }
