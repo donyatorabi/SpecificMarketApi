@@ -2,10 +2,12 @@
 
 namespace Modules\Blog\Http\Requests;
 
+use App\Http\Requests\PrepareRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ArticleRequest extends FormRequest
 {
+    use PrepareRequest;
     /**
      * Get the validation rules that apply to the request.
      *

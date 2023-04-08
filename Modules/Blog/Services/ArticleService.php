@@ -17,13 +17,17 @@ class ArticleService implements ArticleServiceInterface
     /**
      * @see ArticleServiceInterface::getList()
      */
-    public function getList(array $columns, array $criteria = null)
+    public function getList(array $filters = null)
     {
-        $list = $this->articleRepository->getList($criteria);
+        $criteria   = $filters['filters'];
+        $limitation = $filters['limitation'];
+        $list = $this->articleRepository->getList($criteria, $limitation);
 
         return [
             'items' => $this->_prepareData($list),
-            'data'  => []
+            'data'  => [
+                'count' => intval($this->articleRepository->getTotalList($criteria))
+            ]
         ];
     }
 

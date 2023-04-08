@@ -5,9 +5,8 @@ namespace Modules\Blog\Services;
 interface ArticleServiceInterface
 {
     /**
-     * @param array $columns
-     * @param array|null $criteria
+     * @param array|null $filters
      * @return array|null
      */
-    public function getList(array $columns, array $criteria = null);
+    public function getList(array $filters = null);
 }
